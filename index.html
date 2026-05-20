@@ -9,8 +9,8 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --red: #1A6FE8;
-    --red-dark: #1558BF;
+    --accent: #1A6FE8;
+    --accent-dark: #1558BF;
     --bg: #0A0A0A;
     --bg2: #111111;
     --bg3: #1a1a1a;
@@ -81,7 +81,7 @@
     gap: 8px;
     background: rgba(232,0,29,0.15);
     border: 1px solid rgba(232,0,29,0.4);
-    color: var(--red);
+    color: var(--accent);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -97,7 +97,7 @@
   .badge::before {
     content: '';
     width: 6px; height: 6px;
-    background: var(--red);
+    background: var(--accent);
     border-radius: 50%;
     animation: pulse 1.5s ease infinite;
   }
@@ -117,7 +117,7 @@
     animation: fadeUp 0.7s 0.1s ease both;
   }
 
-  .hero-headline .line-red { color: var(--red); display: block; }
+  .hero-headline .line-red { color: var(--accent); display: block; }
   .hero-headline .line-outline {
     display: block;
     -webkit-text-stroke: 1.5px var(--text);
@@ -165,7 +165,7 @@
 
   .author-avatar {
     width: 52px; height: 52px;
-    background: var(--red);
+    background: var(--accent);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -184,7 +184,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: var(--red);
+    background: var(--accent);
     color: #fff;
     font-family: 'Golos Text', sans-serif;
     font-size: 16px;
@@ -208,7 +208,7 @@
     transition: transform 0.5s;
   }
 
-  .btn-primary:hover { background: var(--red-dark); }
+  .btn-primary:hover { background: var(--accent-dark); }
   .btn-primary:hover::after { transform: translateX(100%); }
 
   .tg-icon { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
@@ -223,7 +223,7 @@
 
   /* ── STRIP ── */
   .numbers-strip {
-    background: var(--red);
+    background: var(--accent);
     padding: 20px clamp(20px, 7vw, 120px);
     display: flex;
     gap: clamp(24px, 4vw, 80px);
@@ -250,7 +250,7 @@
   /* ── SECTIONS ── */
   .section { padding: clamp(60px, 10vw, 120px) clamp(20px, 7vw, 120px); }
 
-  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
 
   .section-title {
     font-family: 'Bebas Neue', sans-serif;
@@ -274,7 +274,7 @@
     transition: border-color 0.3s, background 0.3s;
   }
 
-  .for-whom-item:hover { border-left-color: var(--red); background: #161616; }
+  .for-whom-item:hover { border-left-color: var(--accent); background: #161616; }
 
   .fw-icon { font-size: 26px; margin-bottom: 12px; display: block; }
   .fw-title { font-weight: 700; font-size: 16px; margin-bottom: 6px; }
@@ -295,7 +295,7 @@
     transition: border-color 0.3s, background 0.3s;
   }
 
-  .pain-item:hover { border-left-color: var(--red); background: #161616; }
+  .pain-item:hover { border-left-color: var(--accent); background: #161616; }
   .pain-icon { font-size: 26px; margin-bottom: 12px; display: block; }
   .pain-title { font-weight: 700; font-size: 16px; margin-bottom: 6px; }
   .pain-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
@@ -345,7 +345,7 @@
     transition: color 0.2s;
   }
 
-  .module:hover .module-num { color: var(--red); }
+  .module:hover .module-num { color: var(--accent); }
   .module-pre { border-left: 2px solid rgba(245,200,66,0.3); }
 
   .week-badge {
@@ -357,7 +357,7 @@
     text-transform: uppercase;
     padding: 2px 8px;
     background: rgba(232,0,29,0.12);
-    color: var(--red);
+    color: var(--accent);
     border: 1px solid rgba(232,0,29,0.25);
     border-radius: 2px;
     margin-left: 8px;
@@ -385,7 +385,7 @@
   .price-card::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--red), var(--gold));
+    background: linear-gradient(90deg, var(--accent), var(--gold));
   }
 
   .price-tag {
@@ -432,7 +432,7 @@
   }
 
   .proof-placeholder-icon { font-size: 40px; margin-bottom: 16px; }
-  .proof-placeholder-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--red); margin-bottom: 8px; }
+  .proof-placeholder-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); margin-bottom: 8px; }
   .proof-placeholder-text { font-size: 14px; color: var(--muted); max-width: 400px; margin: 0 auto; line-height: 1.6; }
 
   /* ── ABOUT AUTHOR ── */
@@ -453,7 +453,7 @@
 
   .about-avatar {
     width: 120px; height: 120px;
-    background: var(--red);
+    background: var(--accent);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
@@ -473,7 +473,7 @@
   }
 
   .about-name { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1; margin-bottom: 8px; }
-  .about-title { color: var(--red); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+  .about-title { color: var(--accent); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
   .about-text { font-size: 15px; color: rgba(245,240,232,0.75); line-height: 1.7; }
 
   .about-facts {
@@ -485,14 +485,14 @@
     background: var(--bg2);
     padding: 12px 16px;
     font-size: 13px; color: var(--text);
-    border-left: 2px solid var(--red);
+    border-left: 2px solid var(--accent);
   }
 
-  .fact strong { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--red); line-height: 1; }
+  .fact strong { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent); line-height: 1; }
 
   /* ── CTA SECTION ── */
   .cta-section {
-    background: var(--red);
+    background: var(--accent);
     padding: clamp(60px, 8vw, 100px) clamp(20px, 7vw, 120px);
     position: relative; overflow: hidden;
     text-align: center;
@@ -528,7 +528,7 @@
 
   .btn-white {
     display: inline-flex; align-items: center; gap: 10px;
-    background: #fff; color: var(--red);
+    background: #fff; color: var(--accent);
     font-family: 'Golos Text', sans-serif;
     font-size: 16px; font-weight: 700;
     padding: 18px 40px;
@@ -553,8 +553,8 @@
     user-select: none;
   }
 
-  .faq-q:hover { color: var(--red); }
-  .faq-q .arrow { font-size: 20px; color: var(--red); transition: transform 0.3s; flex-shrink: 0; }
+  .faq-q:hover { color: var(--accent); }
+  .faq-q .arrow { font-size: 20px; color: var(--accent); transition: transform 0.3s; flex-shrink: 0; }
   .faq-item.open .faq-q .arrow { transform: rotate(45deg); }
 
   .faq-a {
@@ -575,7 +575,7 @@
     border-top: 1px solid #1a1a1a;
   }
 
-  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--red); letter-spacing: 2px; }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent); letter-spacing: 2px; }
   .footer-copy { font-size: 13px; color: #444; }
 
   /* ── ANIMATIONS ── */
@@ -600,7 +600,7 @@
 
   .floating-btn {
     display: flex; align-items: center; gap: 8px;
-    background: var(--red); color: #fff;
+    background: var(--accent); color: #fff;
     font-family: 'Golos Text', sans-serif;
     font-size: 14px; font-weight: 700;
     padding: 14px 22px;
@@ -630,7 +630,7 @@
     flex: 1 1 200px;
     background: var(--bg2);
     padding: 24px 28px;
-    border-bottom: 3px solid var(--red);
+    border-bottom: 3px solid var(--accent);
     display: flex;
     flex-direction: column;
   }
@@ -668,13 +668,13 @@
     transition: border-color 0.3s;
   }
 
-  .student-card:hover { border-bottom-color: var(--red); }
+  .student-card:hover { border-bottom-color: var(--accent); }
 
   .student-header { display: flex; align-items: center; gap: 14px; }
 
   .student-avatar {
     width: 44px; height: 44px;
-    background: var(--red);
+    background: var(--accent);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
@@ -704,10 +704,10 @@
     margin-bottom: 6px;
   }
 
-  .point-a { background: rgba(232,0,29,0.15); color: var(--red); }
+  .point-a { background: rgba(232,0,29,0.15); color: var(--accent); }
   .point-b { background: rgba(0,208,132,0.15); color: var(--green); }
   .point-text { font-size: 13px; color: rgba(245,240,232,0.7); line-height: 1.5; }
-  .journey-arrow { color: var(--red); font-size: 20px; padding-top: 4px; }
+  .journey-arrow { color: var(--accent); font-size: 20px; padding-top: 4px; }
 
   .student-quote {
     font-size: 13px;
@@ -750,7 +750,7 @@
     transition: border-color 0.3s;
   }
 
-  .review-card:hover { border-bottom-color: var(--red); }
+  .review-card:hover { border-bottom-color: var(--accent); }
   .review-stars { color: var(--gold); font-size: 14px; margin-bottom: 12px; letter-spacing: 2px; }
 
   .review-text {
@@ -765,7 +765,7 @@
 
   .review-avatar {
     width: 38px; height: 38px;
-    background: var(--red);
+    background: var(--accent);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
