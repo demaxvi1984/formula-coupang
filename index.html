@@ -221,6 +221,14 @@ strong{color:var(--txt);font-weight:700}
   transition:.2s;animation:msgIn .34s cubic-bezier(.2,.7,.3,1) both}
 .opt:hover{background:var(--acc);border-color:var(--acc);transform:translateY(-2px);
   box-shadow:0 8px 22px rgba(123,108,255,.4)}
+.asst-input{display:flex;gap:10px;padding:0 22px 14px}
+.asst-input input{flex:1;min-width:0;background:var(--glass);border:1px solid var(--brd);border-radius:100px;padding:12px 18px;color:var(--txt);font-family:MR,sans-serif;font-size:14.5px;outline:none}
+.asst-input input:focus{border-color:var(--acc)}
+.asst-input input::placeholder{color:var(--faint)}
+.asst-input input:disabled{opacity:.5}
+.asst-send{width:44px;height:44px;flex:0 0 auto;border-radius:50%;background:var(--acc);border:none;color:#fff;font-size:16px;display:grid;place-items:center;cursor:pointer;transition:.2s}
+.asst-send:hover{background:var(--acc-lt)}
+.asst-send:disabled{opacity:.5;cursor:default}
 .asst-foot{padding:0 22px 22px}
 .asst-restart{background:none;border:none;color:var(--faint);font-family:MR,sans-serif;font-size:13px;
   cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:6px 0}
@@ -480,6 +488,11 @@ window.CFG = {
   seatsLeft: '7',
   tg:        'https://t.me/Demaxvi',
 
+  /* Адрес ИИ-ассистента (Cloudflare Worker). Пока пусто — чат
+     сразу предлагает написать в Telegram. Заполнить после того,
+     как задеплоите worker.js — см. инструкцию. */
+  chatEndpoint: 'https://formula-coupang-chat.demaxvi1984.workers.dev',
+
   period1:   'май',           /* период, показанный на скриншоте магазина 1 */
   period2:   'май',           /* период, показанный на скриншоте магазина 2 */
 
@@ -610,9 +623,9 @@ window.CFG = {
 <section id="quiz" style="padding-top:clamp(20px,3vw,40px)">
   <div class="wrap">
     <div class="rv" style="text-align:center;margin-bottom:26px">
-      <span class="kick">За 40 секунд</span>
+      <span class="kick">Спросите напрямую</span>
       <h2>Подойдёт ли вам <span class="grad">Coupang?</span></h2>
-      <p class="lead" style="margin:14px auto 0">Отвечу на несколько вопросов и честно скажу, стоит ли вам вообще этим заниматься. Если не подойдёт — так и напишу.</p>
+      <p class="lead" style="margin:14px auto 0">Задайте свой вопрос про модули, цену или сомнения — отвечу честно. Если что-то важное — всегда можно написать мне в Telegram.</p>
     </div>
 
     <div class="asst rv" style="max-width:760px;margin:0 auto">
@@ -624,6 +637,10 @@ window.CFG = {
         </div>
       </div>
       <div class="asst-body" id="chat"></div>
+      <form class="asst-input" id="chatForm" autocomplete="off">
+        <input id="chatInput" type="text" placeholder="Напишите свой вопрос…" maxlength="300" required>
+        <button type="submit" class="asst-send" aria-label="Отправить">➤</button>
+      </form>
       <div class="asst-foot"><button class="asst-restart" id="restart" hidden>Начать заново</button></div>
     </div>
   </div>
@@ -1205,105 +1222,12 @@ if(box){
   if(pf&&C.priceOld&&full) pf.textContent=Math.round((1-full/C.priceOld)*100)+'%';
 }
 
-/* ── Ассистент: диалог по сценарию ───────────────────────── */
+/* ── Ассистент: свободный ИИ-чат ─────────────────────────── */
 var chat=doc.getElementById('chat'), restart=doc.getElementById('restart');
-var answers={};
-
-var SCRIPT={
-  start:{
-    say:['Привет! Я Андрей. Задам несколько вопросов и честно скажу, стоит ли вам браться за Coupang.','Вы сейчас живёте в Корее?'],
-    opts:[
-      {t:'Да, живу в Корее', go:'exp', save:['где','живу в Корее']},
-      {t:'Планирую переезд', go:'move', save:['где','планирую переезд']},
-      {t:'Нет, живу в другой стране', go:'out', save:['где','другая страна']}
-    ]
-  },
-  move:{
-    say:['Понял. Кабинет продавца открывается на местные документы и адрес, поэтому до переезда стартовать не выйдет.','Но подготовиться можно заранее — товар и поставщиков подбирают до приезда. Напишите мне, обсудим сроки.'],
-    end:true
-  },
-  out:{
-    say:['Тогда скажу прямо: курс вам не подойдёт.','Для кабинета продавца на Coupang нужны корейские документы и адрес. Без этого запуска не будет, и брать с вас деньги я не стану.','Если планы изменятся — напишите.'],
-    end:true, cold:true
-  },
-  exp:{
-    say:['Хорошо, это главное условие.','Продавали что-нибудь онлайн раньше?'],
-    opts:[
-      {t:'Никогда', go:'money', save:['опыт','нет опыта']},
-      {t:'Пробовал, не пошло', go:'money', save:['опыт','пробовал, не получилось']},
-      {t:'Есть опыт на других площадках', go:'money', save:['опыт','есть опыт на других площадках']},
-      {t:'Уже продаю на Coupang', go:'money', save:['опыт','уже продаю на Coupang']}
-    ]
-  },
-  money:{
-    say:['Сколько готовы вложить в первую партию товара? Это отдельно от обучения.'],
-    opts:[
-      {t:'Меньше ₩500 000', go:'time', save:['бюджет','меньше ₩500 000']},
-      {t:'₩500 000 – 1 000 000', go:'time', save:['бюджет','₩500 000–1 000 000']},
-      {t:'Больше ₩1 000 000', go:'time', save:['бюджет','больше ₩1 000 000']},
-      {t:'Пока не решил', go:'time', save:['бюджет','пока не решил']}
-    ]
-  },
-  time:{
-    say:['Сколько времени в неделю сможете выделять?'],
-    opts:[
-      {t:'Меньше 3 часов', go:'stop', save:['время','меньше 3 часов']},
-      {t:'5–7 часов', go:'stop', save:['время','5–7 часов']},
-      {t:'Больше 10 часов', go:'stop', save:['время','больше 10 часов']}
-    ]
-  },
-  stop:{
-    say:['Последний вопрос. Что вас останавливает больше всего?'],
-    opts:[
-      {t:'Не знаю корейский', go:'done', save:['стоп','язык']},
-      {t:'Боюсь потерять деньги', go:'done', save:['стоп','страх потерять деньги']},
-      {t:'Не понимаю с чего начать', go:'done', save:['стоп','не знаю с чего начать']},
-      {t:'Сомневаюсь, что это работает', go:'done', save:['стоп','сомнения в результате']}
-    ]
-  }
-};
-
-/* Персональный вердикт по ответам */
-function verdict(){
-  var out=[], warn=[];
-  out.push('Смотрю, что получилось.');
-
-  if(answers['опыт']==='уже продаю на Coupang')
-    out.push('У вас уже есть кабинет — значит, самое сложное позади. Вам полезнее всего модули по рекламе, карточке и масштабированию, а не запуск с нуля.');
-  else if(answers['опыт']==='есть опыт на других площадках')
-    out.push('Опыт на других площадках сильно помогает: логика listing-а и аналитики похожая. Разница в правилах Coupang и в корейском поиске — это как раз то, что разбираем.');
-  else
-    out.push('Опыта нет — это нормально, большинство приходит так же. Виктор до курса работал на заводе и не продавал никогда, вышел на оборот больше ₩4 млн.');
-
-  if(answers['бюджет']==='меньше ₩500 000'){
-    warn.push('Бюджет на товар пока маловат: ниже ₩500 000 выбор товаров сильно сужается. Начать можно, но стартовать лучше с накопленной суммой — иначе первая же ошибка выбьет вас из игры.');
-  }
-  if(answers['время']==='меньше 3 часов'){
-    warn.push('Три часа в неделю — мало. Уроки вы посмотрите, но на практику времени не останется, а результат даёт именно практика.');
-  }
-
-  var stop=answers['стоп'];
-  if(stop==='язык') out.push('Про язык: я сам веду два магазина без свободного корейского. Целый модуль посвящён тому, как закрывать язык нейросетями и шаблонами.');
-  if(stop==='страх потерять деньги') out.push('Про деньги: первые два модуля — ровно про то, как не купить неликвид. Считаем маржинальность до закупки, а не после.');
-  if(stop==='не знаю с чего начать') out.push('Про «с чего начать»: кабинет продавца открываем вместе ещё до старта потока. Первый шаг за вас не сделают, но проведут за руку.');
-  if(stop==='сомнения в результате') out.push('Про сомнения: выше лежит скриншот из Coupang Wing за июнь — с датами 01–30 прямо в кабинете. ₩22 844 330 и 1 733 заказа. Увеличьте и проверьте.');
-
-  if(warn.length){
-    out.push('Что меня смущает: ' + warn.join(' '));
-    out.push('При этом браться можно — просто зайдите в этом с открытыми глазами. Напишите мне, разберём вашу ситуацию по-честному.');
-  } else {
-    out.push('По ответам вы подходите. Напишите мне в Telegram — расскажу, с какого товара начинать именно вам.');
-  }
-  return out;
-}
-
-function summary(){
-  var parts=[];
-  ['где','опыт','бюджет','время','стоп'].forEach(function(k){
-    if(answers[k]) parts.push(k+': '+answers[k]);
-  });
-  return 'Здравствуйте, Андрей! Прошёл опрос на сайте. '+parts.join('; ')+'. Хочу обсудить запуск на Coupang.';
-}
+var chatForm=doc.getElementById('chatForm'), chatInput=doc.getElementById('chatInput');
+var history=[];        /* {role:'user'|'assistant', content:string} */
+var MAX_TURNS=10;       /* предохранитель от расходов на ИИ */
+var busy=false;
 
 function bubble(text,me){
   var d=doc.createElement('div');
@@ -1317,61 +1241,76 @@ function typing(){
   chat.appendChild(d); chat.scrollTop=chat.scrollHeight;
   return d;
 }
-function say(lines,then){
-  var i=0;
-  (function next(){
-    if(i>=lines.length){ then&&then(); return; }
-    var t=typing();
-    setTimeout(function(){
-      t.remove(); bubble(lines[i]); i++;
-      setTimeout(next, 260);
-    }, reduce?120:Math.min(1100, 380+lines[i].length*11));
-  })();
-}
-function options(list){
+function ctaRow(){
+  var old=chat.querySelector('.opts'); if(old) old.remove();
   var wrap=doc.createElement('div'); wrap.className='opts';
-  list.forEach(function(o,idx){
-    var b=doc.createElement('button');
-    b.className='opt'; b.type='button'; b.textContent=o.t;
-    b.style.animationDelay=(idx*60)+'ms';
-    b.addEventListener('click',function(){
-      wrap.remove(); bubble(o.t,true);
-      if(o.save) answers[o.save[0]]=o.save[1];
-      setTimeout(function(){ step(o.go); }, 340);
-    });
-    wrap.appendChild(b);
-  });
+  var a=doc.createElement('a');
+  a.className='btn'; a.target='_blank'; a.rel='noopener'; a.setAttribute('data-cta','ai-chat');
+  a.href=tgLink('Здравствуйте, Андрей! Пообщался(ась) с ассистентом на сайте, хочу обсудить запуск на Coupang.');
+  a.innerHTML='<svg class="tg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>Написать Андрею';
+  a.addEventListener('click',track('ai-chat'));
+  wrap.appendChild(a);
   chat.appendChild(wrap); chat.scrollTop=chat.scrollHeight;
 }
-function finish(cold){
-  var wrap=doc.createElement('div'); wrap.className='opts';
-  if(!cold){
-    var a=doc.createElement('a');
-    a.className='btn'; a.href=tgLink(summary()); a.target='_blank'; a.rel='noopener';
-    a.setAttribute('data-cta','quiz');
-    a.innerHTML='<svg class="tg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>Написать Андрею';
-    a.addEventListener('click',track('quiz'));
-    wrap.appendChild(a);
-  }
-  var p=doc.createElement('a');
-  p.className='opt'; p.href='#program'; p.textContent='Посмотреть программу';
-  wrap.appendChild(p);
-  chat.appendChild(wrap);
-  restart.hidden=false;
-  chat.scrollTop=chat.scrollHeight;
+function lockInput(placeholder){
+  chatInput.disabled=true;
+  chatForm.querySelector('.asst-send').disabled=true;
+  if(placeholder) chatInput.placeholder=placeholder;
 }
-function step(key){
-  if(key==='done'){ say(verdict(), function(){ finish(false); }); return; }
-  var n=SCRIPT[key]; if(!n) return;
-  say(n.say, function(){
-    if(n.opts) options(n.opts);
-    else if(n.end) finish(!!n.cold);
+function unlockInput(){
+  chatInput.disabled=false;
+  chatForm.querySelector('.asst-send').disabled=false;
+  chatInput.placeholder='Напишите свой вопрос…';
+}
+function greet(){
+  bubble('Привет! Спросите про модули, цену, сроки или сомнения — отвечу как можно честнее. Если что-то важное — всегда можно написать мне напрямую в Telegram.');
+}
+function sendMsg(text){
+  if(busy) return;
+  busy=true;
+  bubble(text,true);
+  if(!C.chatEndpoint){
+    setTimeout(function(){
+      bubble('Чат сейчас недоступен — напишите мне в Telegram, отвечу лично.');
+      ctaRow(); busy=false;
+    }, 300);
+    return;
+  }
+  history.push({role:'user',content:text});
+  var t=typing();
+  fetch(C.chatEndpoint,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({messages:history})
+  }).then(function(res){
+    return res.json().then(function(data){ return {ok:res.ok, data:data}; });
+  }).then(function(r){
+    t.remove();
+    if(!r.ok || !r.data || !r.data.reply) throw new Error('bad response');
+    bubble(r.data.reply);
+    history.push({role:'assistant',content:r.data.reply});
+    var turns=history.filter(function(m){return m.role==='user';}).length;
+    if(turns>=MAX_TURNS){ lockInput('Лимит вопросов исчерпан'); ctaRow(); }
+    busy=false;
+  }).catch(function(){
+    t.remove();
+    bubble('Не получилось получить ответ. Попробуйте ещё раз или напишите мне в Telegram.');
+    ctaRow();
+    busy=false;
   });
 }
-if(chat){
-  step('start');
+if(chat && chatForm){
+  greet();
+  restart.hidden=false;
+  chatForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=chatInput.value.trim();
+    if(!v||busy) return;
+    chatInput.value='';
+    sendMsg(v);
+  });
   restart.addEventListener('click',function(){
-    chat.innerHTML=''; answers={}; restart.hidden=true; step('start');
+    chat.innerHTML=''; history=[]; unlockInput(); greet();
   });
 }
 
