@@ -309,6 +309,8 @@ strong{color:var(--txt);font-weight:700}
   .mod-p b{display:inline}.mod-p span{margin-left:7px}
 }
 .mod.free .mod-p b{color:var(--ok)}
+.mod-file{margin-top:14px;white-space:normal;text-align:left}
+@media(max-width:560px){.mod-file{width:100%}}
 .mod.only .mod-p b{color:var(--acc-lt);font-size:14px}
 .mod.bonus{background:linear-gradient(120deg,rgba(255,165,60,.12),rgba(123,108,255,.07));border-color:rgba(255,165,60,.3)}
 .mod.bonus .mod-n{color:var(--acc-2);font-size:26px}
@@ -484,7 +486,7 @@ footer{border-top:1px solid var(--brd-2);padding:26px var(--px) calc(26px + env(
      ══════════════════════════════════════════════════════════════ -->
 <script>
 window.CFG = {
-  startDate: '29 августа',
+  startDate: '26 сентября',
   seatsLeft: '7',
   tg:        'https://t.me/Demaxvi',
 
@@ -507,7 +509,9 @@ window.CFG = {
   modules: [
     { week:'До старта', title:'Открываем кабинет продавца', price:0,
       desc:'Регистрируем аккаунт на Coupang Wing, настраиваем налоги и бизнес-профиль. К первой неделе вы приходите готовым.',
-      bullets:['регистрация на Coupang Wing','настройка налогов и бизнес-профиля'] },
+      bullets:['регистрация на Coupang Wing','настройка налогов и бизнес-профиля'],
+      /* PDF-файл лежит в репозитории рядом с index.html */
+      file:'saeopja-hometax.pdf', fileLabel:'Инструкция: как оформить 사업자 онлайн (PDF)' },
 
     { week:'Неделя 1', title:'Поиск и анализ товара', price:500000,
       desc:'Как найти прибыльный товар и посчитать деньги до того, как вы их вложили.',
@@ -596,7 +600,7 @@ window.CFG = {
           <img src="andrey-cut.webp" width="820" height="900" alt="Андрей — действующий продавец Coupang" fetchpriority="high">
         </div>
         <div class="hero-txt">
-          <span class="pill"><i class="dot"></i>Старт потока — <b data-cfg="startDate">29 августа</b> · осталось <b data-cfg="seatsLeft">7</b> мест</span>
+          <span class="pill"><i class="dot"></i>Старт потока — <b data-cfg="startDate">26 сентября</b> · осталось <b data-cfg="seatsLeft">7</b> мест</span>
           <h1>Свой магазин<br>на Coupang<br><span class="grad">за&nbsp;8&nbsp;недель</span></h1>
           <p class="lead">Пошаговая система запуска для русскоязычных в Корее. Без знания корейского и без опыта продаж — по той же схеме, на которой я веду два действующих магазина.</p>
           <div class="hero-cta">
@@ -984,7 +988,7 @@ window.CFG = {
 
     <div class="price">
       <div class="pcard rv">
-        <span class="pill" style="margin-bottom:20px"><i class="dot"></i>Старт <b data-cfg="startDate">29 августа</b> · осталось <b data-cfg="seatsLeft">7</b> мест</span>
+        <span class="pill" style="margin-bottom:20px"><i class="dot"></i>Старт <b data-cfg="startDate">26 сентября</b> · осталось <b data-cfg="seatsLeft">7</b> мест</span>
         <div class="p-old">₩ <span id="pOld">2 000 000</span></div>
         <div class="p-off">Скидка <span id="pOff">25%</span></div>
         <div class="p-now"><i>₩</i><span id="pNow">1 500 000</span></div>
@@ -1075,7 +1079,7 @@ window.CFG = {
       <details><summary>Сколько времени нужно в неделю?</summary><div class="a">5–7 часов. Один модуль в неделю плюс практика. Если неделя выпала — материалы остаются, догоните.</div></details>
       <details><summary>Что если у меня заблокирован кабинет?</summary><div class="a">Напишите — посмотрю ситуацию. Такие случаи уже были, разблокировали и запускались.</div></details>
       <details><summary>Есть ли гарантия результата?</summary><div class="a">Гарантии конкретной суммы не даст никто честный — слишком много зависит от товара, вложений и ваших действий. Я гарантирую систему, обратную связь и личное участие.</div></details>
-      <details><summary>Когда начало и сколько длится?</summary><div class="a">Старт <span data-cfg="startDate">29 августа</span>, восемь недель, по модулю в неделю. Доступ к материалам остаётся бессрочно.</div></details>
+      <details><summary>Когда начало и сколько длится?</summary><div class="a">Старт <span data-cfg="startDate">26 сентября</span>, восемь недель, по модулю в неделю. Доступ к материалам остаётся бессрочно.</div></details>
       <details><summary>Я живу не в Корее. Мне подойдёт?</summary><div class="a">Курс рассчитан на тех, кто живёт в Корее: для кабинета продавца нужны местный адрес и документы. Если вы планируете переезд — напишите, обсудим.</div></details>
       <details><summary>Как оплатить?</summary><div class="a">Напишите в Telegram — расскажу удобные способы и отвечу на вопросы до оплаты.</div></details>
     </div>
@@ -1088,7 +1092,7 @@ window.CFG = {
     <div class="dl rv">
       <div>
         <span class="kick">Набор закрывается</span>
-        <h2>Старт — <span class="orange" data-cfg="startDate">29 августа</span></h2>
+        <h2>Старт — <span class="orange" data-cfg="startDate">26 сентября</span></h2>
         <p style="margin-top:10px">После старта набор закрывается до следующего потока.</p>
       </div>
       <div class="dl-r">
@@ -1186,9 +1190,12 @@ if(box){
       ? '<ul style="margin-top:9px;list-style:none;display:flex;flex-direction:column;gap:5px">'+
         m.bullets.map(function(b){return '<li style="font-size:13px;color:var(--dim);display:flex;gap:9px"><span style="color:var(--acc-2)">→</span>'+b+'</li>';}).join('')+
         '</ul>' : '';
+    var fl=m.file ? '<a class="btn btn-2 btn-sm mod-file" href="'+m.file+'" target="_blank" rel="noopener" download>'+
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>'+
+      (m.fileLabel||'Скачать PDF')+'</a>' : '';
     html+='<div class="mod'+(m.price===0?' free':'')+((m.price==null||m.price==='in02')?' only':'')+(m.bonus?' bonus':'')+'">'+
       '<div class="mod-n">'+num+'</div>'+
-      '<div class="mod-t">'+lbl+'<b>'+m.title+'</b><p>'+m.desc+'</p>'+bl+'</div>'+
+      '<div class="mod-t">'+lbl+'<b>'+m.title+'</b><p>'+m.desc+'</p>'+bl+fl+'</div>'+
       '<div class="mod-p"><b>'+price+'</b><span>'+note+'</span></div></div>';
   });
   box.innerHTML=html;
